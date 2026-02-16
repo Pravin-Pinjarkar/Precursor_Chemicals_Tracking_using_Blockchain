@@ -20,9 +20,9 @@ The goal is to prevent illegal diversion, misuse, and manipulation of sensitive 
 
 ## Technologies Used
 - Blockchain (Smart Contracts)
-- Python / Django (Backend)
+- Python / Django, MERN Stack (Backend)
 - HTML, CSS, JavaScript (Frontend)
-- Database (SQLite / MongoDB)
+- Database-MongoDB
 - Anomaly Detection Algorithms
 - Cryptographic Hashing
 
