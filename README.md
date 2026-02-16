@@ -29,7 +29,7 @@ The goal is to prevent illegal diversion, misuse, and manipulation of sensitive 
 ---
 
 ## My Project Roles
-- Chemical Manufacturer
+- Chemical Industry Owner
 - Distributor
 - Lab Assistant
 
