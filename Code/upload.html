@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chemical Upload Dashboard</title>
+  <link rel="stylesheet" href="upload.css"/>
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h2>Documents to Upload</h2>
+      <ul>
+        <li class="active" data-target="msds">📄 MSDS / SDS</li>
+        <li data-target="coa">📄 COA</li>
+        <li data-target="tds">📄 TDS</li>
+        <li data-target="compliance">📄 Compliance Certificates</li>
+        <li data-target="import">📄 Import/Export Licenses</li>
+        <li data-target="waste">📄 Waste Disposal Certificates</li>
+        <li data-target="transport">📄 Transport Documents</li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="uploaded">Upload Files</button>
+        <button class="tab-btn" data-tab="settings">Uploaded Files List</button>
+      </div>
+
+      <!-- Upload Files Panel -->
+      <div class="tab-content active" id="uploaded">
+        <div id="uploadPanel">
+          <h2 id="uploadTitle">Upload MSDS / SDS (Material Safety Data Sheet)</h2>
+
+          <!-- File Card -->
+          <div id="fileCard" class="file-card">
+            <div class="file-card-content">
+              <span id="fileIcon" class="file-icon">📄</span>
+              <p id="fileName">No file selected</p>
+            </div>
+            <div class="file-actions">
+              <button class="upload-btn">Choose File</button>
+              <button class="replace-btn hidden">Replace</button>
+              <input type="file" id="fileInput" hidden />
+            </div>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="progress-box hidden" id="progressBox">
+            <div class="progress-bar" id="progressBar"></div>
+            <span id="progressText">0%</span>
+          </div>
+        </div>
+
+        <!-- Costing & Distribution Cards -->
+        <section class="cards">
+          <div class="card cost">
+            <h3>💰 Cost per Unit</h3>
+            <p>250</p>
+          </div>
+          <div class="card distributor">
+            <h3>🚚 Distributor Assigned</h3>
+            <select id="chem-factories" name="chem-factories">
+              <option value="adt-industries">ADT Industries Pvt. Ltd. (Navi Mumbai)</option>
+              <option value="ir-tubes">IR Tubes Pvt. Ltd. (Pune)</option>
+              <option value="venlar-corp">Venlar Corporation (Navi Mumbai)</option>
+              <option value="aamur-chem">Aamur Chemicals (Mumbai)</option>
+              <option value="nadkarni-polymer">Nadkarni Speciality Polymer & Coatings Pvt. Ltd. (Mumbai)</option>
+              <option value="pragna-group">Pragna Group (Ankleshwar)</option>
+              <option value="annexe-chem">Annexe Chem Pvt. Ltd. (Vadodara)</option>
+              <option value="srini-chem">Srini Chem (Hyderabad)</option>
+              <option value="prakash-intl">Prakash Chemicals International (Vadodara)</option>
+              <option value="fine-chemicals">Fine Chemicals (Jaipur)</option>
+              <option value="garg-chem">Garg Chemical Industries (Delhi)</option>
+              <option value="magus-chem">Magus Chemicals & Scientific Equipments (Mohali)</option>
+              <option value="prakash-agencies">Prakash Chemicals Agencies Pvt. Ltd. (Vadodara)</option>
+              <option value="tkm-pharma">TKM Pharma (Hyderabad)</option>
+              <option value="shree-khatushyam">Shree Khatushyam Chemicals (Ahmedabad)</option>
+              <option value="kaveri-bio">Kaveri Bio Technology (Narela, Delhi)</option>
+              <option value="golchhashree">Golchhashree Polymers & Chemicals LLP (Kolkata)</option>
+              <option value="supreme-chem">Supreme Chemicals (New Delhi)</option>
+            </select>
+          </div>
+          <div class="card stock">
+            <h3>📦 Available Stock</h3>
+            <p>1200 units</p>
+          </div>
+          <div class="card reserved">
+            <h3>📑 Reserved for Orders</h3>
+            <p>450 units</p>
+          </div>
+        </section>
+      </div>
+
+      <!-- Uploaded Files List Panel -->
+      <div class="tab-content" id="settings">
+        <section class="uploaded-list">
+          <h3>📑 Uploaded Documents</h3>
+          <table id="uploadsTable">
+            <thead>
+              <tr>
+                <th>Section</th>
+                <th>File Name</th>
+                <th>Distributor</th>
+                <th>Uploaded At</th>
+                <th>Action</th>
+                <th>DELETE</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </section>
+
+        <div class="confirm-container">
+          <button id="confirmBtn" class="confirm-btn">Confirm</button>
+        </div>
+      </div>
+
+      <!-- Toast -->
+        <div id="toast">
+          <span id="toastMessage"></span>
+          <div id="toastActions">
+            <button id="toastYes">Yes</button>
+            <button id="toastNo">No</button>
+          </div>
+        </div>
+
+    </main>
+  </div>
+
+
+  <script src="upload.js"></script>
+</body>
+</html>

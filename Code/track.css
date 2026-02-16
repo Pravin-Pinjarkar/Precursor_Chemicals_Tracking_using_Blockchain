@@ -1,0 +1,279 @@
+/* ===== Base Styles ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  color: #1e293b;
+  margin: 0;
+  padding: 30px;
+  background: url("track.png") no-repeat center center fixed;
+  background-size: cover; /* make it scale */
+}
+
+
+.container {
+  max-width: 1100px;
+  margin: auto;
+}
+
+/* ===== Header ===== */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+header h1 {
+  font-size: 28px;
+  color: #0f172a;
+}
+
+.btn {
+  background: #1e40af;
+  color: #4b40de;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: 0.3s;
+}
+
+.btn:hover {
+  background: #2563eb;
+  transform: scale(1.05);
+}
+
+/* ===== Card ===== */
+.card {
+  background: rgba(255, 255, 255, 0.7); /* semi-transparent white */
+  border-radius: 15px;
+  box-shadow: 0 6px 15px rgba(7, 47, 136, 0.1);
+  padding: 30px;
+  margin-bottom: 30px;
+  backdrop-filter: blur(8px); /* optional glassmorphism effect */
+}
+
+.card h2 {
+  margin-bottom: 15px;
+  font-size: 20px;
+  color:#1e293b;
+}
+
+.chart-container {
+  background: rgba(255, 255, 255, 0.3); /* semi-transparent */
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  backdrop-filter: blur(8px);
+}
+
+/* ===== Table ===== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed; /* equal widths for all columns */
+}
+
+
+th, td {
+  padding: 15px 0px;
+  text-align: center;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+th {
+  color: #475569;
+}
+
+tr:hover {
+  background: #f9fafb;
+  transition: background 0.3s;
+}
+
+
+/* status */
+
+.status.active {
+  background: #dcfce7;
+  border: 2px solid green;
+  color: #15803d;
+}
+.status.completed {
+  background: #fef9c3;
+  border: 2px solid rgb(201, 201, 35);
+  color: #b45309;
+}
+.status.anomaly {
+  background: #fecaca;
+  color: #b91c1c;
+}
+.status.flagged-anomaly {
+  border: 2px solid red;
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+/* ===== Status Labels ===== */
+.status {
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+
+
+svg {
+  overflow: visible;
+}
+
+.axis {
+  stroke: #cbd5e1;
+  stroke-width: 1;
+}
+
+.grid {
+  stroke: #e2e8f0;
+  stroke-width: 1;
+}
+
+.bar {
+  fill: #3b82f6;
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 1s ease;
+}
+
+.bar.animate {
+  transform: scaleY(1);
+}
+
+.bar:hover {
+  fill: #2563eb;
+}
+
+.line {
+  fill: none;
+  stroke: #2563eb;
+  stroke-width: 2;
+}
+
+.text-label {
+  font-size: 12px;
+  fill: #475569;
+}
+
+
+
+.chart-container {
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+h2 {
+  margin-bottom: 15px;
+}
+
+.grid {
+  stroke: #e5e7eb;
+  stroke-width: 1;
+}
+
+.text-label {
+  font-size: 12px;
+  fill: #374151;
+}
+
+.bar {
+  fill: #2c25eb;
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 1s ease;
+}
+
+.bar.animate {
+  transform: scaleY(1);
+}
+
+.bar:hover {
+  fill: #2563eb;
+  cursor: pointer;
+}
+
+.line {
+  fill: none;
+  stroke: #2563eb;
+  stroke-width: 2;
+}
+
+.point {
+  fill: #2c25eb;
+  stroke: #fff;
+  stroke-width: 2;
+  r: 5;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.point.show {
+  opacity: 1;
+  cursor: pointer;
+}
+
+/* Tooltip styling */
+.tooltip {
+  position: absolute;
+  padding: 8px 12px;
+  background: #1e293b;
+  color: #fff;
+  font-size: 13px;
+  border-radius: 6px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -120%);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  white-space: nowrap;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+.tooltip.show {
+  opacity: 1;
+  transform: translate(-50%, -130%);
+}
+
+
+
+/* Year Dropdown Styling */
+.year-dropdown {
+  padding: 12px 18px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #1e293b;
+  margin-left: 800px;
+  background: #fff;
+  border: 2px solid #2563eb;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.year-dropdown:hover {
+  background: #f1f5ff;
+  border-color: #1e40af;
+}
+
+.year-dropdown:focus {
+  outline: none;
+  border-color: #1d4ed8;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.3);
+}
+

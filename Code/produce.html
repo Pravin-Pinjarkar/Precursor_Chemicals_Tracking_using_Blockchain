@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chemical Information Form</title>
+  <link rel="stylesheet" href="chemical.css">
+</head>
+<body>
+  <div class="form-container">
+    <h2>Chemical Information</h2>
+    <form id="chemicalForm">
+      
+      <div class="form-group">
+        <label>Company Name</label>
+        <input type="text" id="company" required>
+        <span class="error"></span>
+      </div>
+
+      <div class="form-group">
+        <label>Chemical Name</label>
+        <input type="text" id="name" placeholder="e.g. Sulfuric Acid, Methanol" required>
+        <span class="error"></span>
+      </div>
+
+      <div class="form-group">
+        <label>Chemical Formula</label>
+        <input type="text" id="formula" placeholder="e.g. H₂SO₄, CH₃OH" required>
+        <span class="error"></span>
+      </div>
+
+      <div class="form-group">
+        <label>CAS Number</label>
+        <input type="text" id="cas" required>
+        <span class="error"></span>
+      </div>
+
+      <div class="form-group">
+        <label>Quantity (kg/L/tons)</label>
+        <input type="number" id="quantity" required>
+        <span class="error"></span>
+      </div>
+
+      <div class="form-group">
+        <label>Batch Number / Lot Number</label>
+        <input type="text" id="batch">
+        <span class="error"></span>
+      </div>
+
+      <div class="form-group">
+        <label>Manufacturing Date</label>
+        <input type="date" id="manuDate" required>
+        <span class="error"></span>
+      </div>
+
+      <div class="form-group">
+        <label>Expiry Date / Shelf Life</label>
+        <input type="date" id="expDate" required>
+        <span class="error"></span>
+      </div>
+
+      <div class="form-group">
+        <label>Storage Conditions</label>
+        <textarea id="storage" placeholder="Temperature, humidity, etc."></textarea>
+        <span class="error"></span>
+      </div>
+
+      <div class="form-group">
+        <label>Country</label>
+        <select id="country" required>
+          <option value="India">India</option>
+        </select>
+        <span class="error"></span>
+      </div>
+
+      <div class="form-group">
+        <label>State</label>
+        <select id="state" required>
+          <option value="">-- Select State --</option>
+          <option value="Maharashtra">Maharashtra</option>
+          <option value="Karnataka">Karnataka</option>
+          <option value="Tamil Nadu">Tamil Nadu</option>
+          <option value="Delhi">Delhi</option>
+          <option value="Gujarat">Gujarat</option>
+          <option value="West Bengal">West Bengal</option>
+        </select>
+        <span class="error"></span>
+      </div>
+
+      <div class="form-group">
+        <label>City</label>
+        <select id="city" required>
+          <option value="">-- Select City --</option>
+          <option value="Mumbai">Mumbai</option>
+          <option value="Pune">Pune</option>
+          <option value="Nagpur">Nagpur</option>
+          <option value="Thane">Thane</option>
+          <option value="Nashik">Nashik</option>
+          <option value="Aurangabad">Aurangabad</option>
+          <option value="Amravati">Amravati</option>
+          <option value="Solapur">Solapur</option>
+          <option value="Kolhapur">Kolhapur</option>
+          <option value="Sangli">Sangli</option>
+          <option value="Jalgaon">Jalgaon</option>
+          <option value="Akola">Akola</option>
+          <option value="Latur">Latur</option>
+          <option value="Dhule">Dhule</option>
+          <option value="Beed">Beed</option>
+          <option value="Nanded">Nanded</option>
+          <option value="Satara">Satara</option>
+          <option value="Chandrapur">Chandrapur</option>
+          <option value="Gondia">Gondia</option>
+          <option value="Bhandara">Bhandara</option>
+          <option value="Wardha">Wardha</option>
+          <option value="Ratnagiri">Ratnagiri</option>
+          <option value="Sindhudurg">Sindhudurg</option>
+        </select>
+        <span class="error"></span>
+      </div>
+
+      <div class="form-group">
+        <label>Type of Use</label>
+        <select id="useType" required>
+          <option value="">-- Select --</option>
+          <option>Industrial</option>
+          <option>Research</option>
+          <option>Pharma</option>
+          <option>Other</option>
+        </select>
+        <span class="error"></span>
+      </div>
+
+      <div class="form-group">
+        <label>Question</label>
+        <textarea id="question" placeholder="Write your question here..."></textarea>
+        <span class="error"></span>
+      </div>
+
+      <button type="submit" class="submit-btn">Submit</button>
+
+      <!-- ⭐ NEW BUTTON ADDED HERE -->
+      <button type="button" class="submit-btn"
+        onclick="window.location.href='blockchain.html'"
+        style="margin-top: 10px;">
+        View Blockchain Records
+      </button>
+
+    </form>
+  </div>
+
+  <div id="toast"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
+  <script src="chemical.js"></script>
+</body>
+</html>

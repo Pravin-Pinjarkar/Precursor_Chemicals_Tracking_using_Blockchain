@@ -1,0 +1,256 @@
+body {
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: 
+    /* linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)),   */
+    url('addbatch.png') no-repeat center center fixed;
+  background-size: cover;
+  color: #333;
+}
+
+/* Transparent card/modal background */ 
+
+#details, 
+ .modal-content {
+  background: rgba(255, 255, 255, 0.85); /* semi-transparent white */
+   backdrop-filter: blur(6px); /*adds glass-like effect  */
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+} 
+
+
+header {
+  background: #1e293b;
+  color: #fff;
+  padding: 1rem 2rem;
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+.container {
+  padding: 2rem;
+  text-align: center;
+  margin: 80px auto; 
+}
+button {
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.btn-primary {
+  background: #2563eb;
+  color: #fff;
+}
+.btn-primary:hover {
+  background: #1d4ed8;
+  transform: scale(1.05);
+  box-shadow: 0 6px 15px rgba(37, 99, 235, 0.3);
+}
+.modal {
+  display: none;
+  margin-top: 50px;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.4s;
+}
+.modal-content {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  width: 400px;
+  max-width: 95%;
+  max-height: 90vh; /* Scrollable modal */
+  overflow-y: auto;
+  animation: slideUp 0.4s ease;
+}
+@keyframes fadeIn {
+  from {opacity: 0;} to {opacity: 1;}
+}
+@keyframes slideUp {
+  from {transform: translateY(50px); opacity: 0;}
+  to {transform: translateY(0); opacity: 1;}
+}
+.form-group {
+  margin-bottom: 1rem;
+  text-align: left;
+}
+label {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 0.3rem;
+}
+input, textarea, select {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: border 0.3s;
+}
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border: 1px solid #2563eb;
+  box-shadow: 0 0 6px rgba(37, 99, 235, 0.3);
+}
+select {
+  max-height: 150px;
+  overflow-y: auto;
+}
+.qr-box {
+  text-align: center;
+  margin: 1rem 0;
+}
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+.btn-secondary {
+  background: #e5e7eb;
+  color: #111;
+}
+.btn-secondary:hover {
+  background: #d1d5db;
+  transform: scale(1.05);
+}
+#details {
+  margin-top: 2rem;
+  background:white;
+  padding: 1.3rem;
+  margin-left: 540px;
+  border-radius: 16px;
+  max-width: 350px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  display: none;
+  transition: all 0.3s ease, transform 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+/* Hover effect */
+#details:hover {
+  box-shadow: 0 8px 25px #db911b33;
+  transform: translateY(-6px) scale(1.02);
+  background: linear-gradient(135deg, #ffffff, #f9f9ff);
+}
+
+/* Optional: subtle animation when it first appears */
+#details.show {
+  animation: fadeInUp 0.5s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+.modal-content.scrollable {
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+#precursor {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.add-heading {
+  color: purple;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.add-head {
+  color: purple;
+  margin-top: 0px;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+
+#qrcode canvas {
+  width: 120px !important;  /* smaller QR size */
+  height: 120px !important;
+}
+
+
+.batch-card {
+  background: rgba(255, 255, 255, 0.85); /* transparent card */
+  backdrop-filter: blur(6px); /* glass effect */
+  border-radius: 12px;
+  padding: 10px 10px;
+  margin: 10px auto;
+  width: fit-content;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  text-align: center;
+}
+
+.batch-card h2 {
+  color: #6a1b9a; /* purple heading */
+  font-size: 1.2rem;
+  margin: 0;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+
+
+/* ===== Toast Notification Styling ===== */
+.toast {
+  position: fixed;
+  top: 20px;
+  left: 600px;
+  background: rgba(37, 99, 235, 0.9); /* blue default */
+  color: white;
+  padding: 14px 18px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  font-weight: 500;
+  z-index: 9999;
+  opacity: 0;
+  transform: translateY(-20px);
+  animation: slideDown 0.4s forwards;
+}
+
+.toast.success {
+  background: rgba(34, 197, 94, 0.9); /* green */
+}
+.toast.error {
+  background: rgba(239, 68, 68, 0.9); /* red */
+}
+.toast.warning {
+  background: rgba(234, 179, 8, 0.9); /* yellow */
+}
+
+@keyframes slideDown {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}

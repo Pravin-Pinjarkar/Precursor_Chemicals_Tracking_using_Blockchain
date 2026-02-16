@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Settings</title>
+  <link rel="stylesheet" href="settings.css">
+</head>
+<body>
+
+<div class="settings-container">
+  <h2 class="title">⚙ Account & Dashboard Settings</h2>
+
+  <!-- 2FA -->
+  <div class="setting-item">
+    <label>
+      <input type="checkbox" id="twoFA">
+      Enable Two-Factor Authentication (OTP Login)
+    </label>
+  </div>
+
+  <!-- Theme -->
+  <div class="setting-item">
+    <label>Theme Mode</label>
+    <select id="themeMode">
+      <option value="light">Light Mode</option>
+      <option value="dark">Dark Mode</option>
+    </select>
+  </div>
+
+  <!-- Notifications -->
+  <div class="setting-item">
+    <label>Notifications</label>
+    <select id="notifyMode">
+      <option value="email">Email</option>
+      <option value="sms">SMS</option>
+      <option value="none">None</option>
+    </select>
+  </div>
+
+  <!-- Language -->
+  <div class="setting-item">
+    <label>Language</label>
+    <select id="languageSet">
+      <option value="en">English</option>
+      <option value="hi">Hindi</option>
+    </select>
+  </div>
+
+  <!-- Sound Alert -->
+  <div class="setting-item">
+    <label>
+      <input type="checkbox" id="soundAlert">
+      Enable sound for dashboard updates
+    </label>
+  </div>
+
+  <!-- Auto Refresh -->
+  <div class="setting-item">
+    <label>Auto-Refresh Dashboard</label>
+    <select id="refreshRate">
+      <option value="0">Disabled</option>
+      <option value="1">Every 1 minute</option>
+      <option value="5">Every 5 minutes</option>
+    </select>
+  </div>
+
+  <button id="saveBtn" class="save-btn">Save Settings</button>
+</div>
+
+<script src="settings.js"></script>
+</body>
+</html>

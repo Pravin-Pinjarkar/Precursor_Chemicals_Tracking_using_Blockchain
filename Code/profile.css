@@ -1,0 +1,358 @@
+/* ---- GLOBAL ---- */
+body {
+  margin: 0;
+  background: radial-gradient(circle at top left, #d7ebff, #a8c9ff, #6ba5ff);
+  overflow-x: hidden;
+  font-family: "Poppins", sans-serif;
+  position: relative;
+  color: #fff;
+}
+
+/* ---- MOLECULAR BACKGROUND EFFECT ---- */
+.molecule-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.molecule {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  opacity: 0.2;
+  background: radial-gradient(circle, rgba(66,165,245,0.7) 10%, transparent 40%);
+  animation: floatMolecule 25s linear infinite;
+}
+
+.molecule::before,
+.molecule::after {
+  content: "";
+  position: absolute;
+  background: rgba(33,81,165,0.4);
+  width: 3px;
+  height: 70px;
+  left: 50%;
+  top: 50%;
+  transform-origin: top;
+  animation: rotateBond 10s linear infinite;
+}
+
+.molecule::after {
+  transform: rotate(120deg);
+  animation-delay: -5s;
+}
+
+@keyframes floatMolecule {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0.3; }
+  50% { transform: translateY(-40px) rotate(180deg); opacity: 0.5; }
+  100% { transform: translateY(0) rotate(360deg); opacity: 0.3; }
+}
+
+@keyframes rotateBond {
+  0% { transform: rotate(0deg) scale(1); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+/* Random molecule positions */
+.molecule:nth-child(1) { top: 10%; left: 15%; animation-duration: 30s; }
+.molecule:nth-child(2) { top: 50%; left: 70%; animation-duration: 40s; }
+.molecule:nth-child(3) { top: 30%; left: 45%; animation-duration: 50s; }
+.molecule:nth-child(4) { top: 70%; left: 25%; animation-duration: 35s; }
+.molecule:nth-child(5) { top: 80%; left: 80%; animation-duration: 45s; }
+
+/* ---- ACCOUNT SECTION ---- */
+.account-section {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  min-height: 100vh;
+  padding-bottom: 50px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ---- HEADER CARD ---- */
+.header-card {
+  width: 85%;
+  max-width: 1200px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 100px;
+  background: linear-gradient(135deg, #0a1f44, #163d7a);
+  margin-top: 40px;
+  padding: 20px 50px;
+  border-radius: 18px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.35);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Glowing chemical aura */
+.header-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top right, rgba(66,165,245,0.3), transparent 70%),
+              radial-gradient(circle at bottom left, rgba(255,152,0,0.2), transparent 60%);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+/* ---- HEADER LEFT ---- */
+.header-left h1 {
+  font-size: 26px;
+  color: #ff9800;
+  font-weight: 600;
+  margin: 0;
+  text-shadow: 0 0 8px rgba(255,152,0,0.6);
+}
+
+/* ---- HEADER RIGHT (PROFILE) ---- */
+.header-right {
+  display: flex;
+  font-size: 70px;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.profile-avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid #42a5f5;
+  box-shadow: 0 0 15px rgba(66, 165, 245, 0.5);
+  background-size: cover;
+  background-position: center;
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 10px rgba(66, 165, 245, 0.6); }
+  50% { box-shadow: 0 0 25px rgba(66, 165, 245, 0.9); }
+}
+
+/* ---- DISPLAY NAME ---- */
+.display-name {
+  color: #ffffff;
+  font-weight: 500;
+  text-align: center;
+  font-size: 16px;
+  margin-top: 8px;
+  animation: fadeIn 0.8s ease-in-out;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.display-name:hover {
+  color: #ffb74d;
+  text-shadow: 0 0 15px rgba(255,183,77,0.9);
+  transition: 0.3s ease;
+}
+
+/* ---- ACCOUNT CARD ---- */
+.account-card {
+  background: rgba(255, 255, 255, 0.92);
+  padding: 35px 50px;
+  border-radius: 14px;
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.15);
+  width: 90%;
+  max-width: 750px;
+  backdrop-filter: blur(6px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid rgba(212, 214, 215, 0.1);
+}
+
+.account-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 22px rgba(237, 238, 239, 0.25);
+}
+
+.account-card h2 {
+  margin-bottom: 20px;
+  border-bottom: 2px solid #d0e2ff;
+  padding-bottom: 8px;
+  color: #2151a5;
+  font-weight: 600;
+}
+
+/* ---- INFO GRID ---- */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.info-grid div {
+  background: linear-gradient(145deg, #f1f5fb, #e9f1ff);
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-size: 15px;
+  color: #333;
+  border: 1px solid #e3e9f5;
+  transition: background 0.3s ease;
+}
+.info-grid div:hover {
+  background: linear-gradient(145deg, #e1ecff, #f5f9ff);
+}
+
+/* ---- UPLOAD BUTTON ---- */
+.upload-section {
+  margin-top: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.upload-btn {
+  display: inline-block;
+  background: linear-gradient(135deg, #1565c0, #42a5f5);
+  color: #fff;
+  padding: 12px 28px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  font-weight: 500;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
+  letter-spacing: 0.5px;
+}
+.upload-btn:hover {
+  background: linear-gradient(135deg, #0d47a1, #2196f3);
+  transform: translateY(-2px);
+}
+
+/* ---- BACK BUTTON ---- */
+.back-btn {
+  display: inline-block;
+  margin-top: 25px;
+  text-decoration: none;
+  color: #1565c0;
+  font-weight: 500;
+  transition: 0.2s ease;
+}
+.back-btn:hover {
+  color: #0d47a1;
+  text-decoration: underline;
+}
+
+
+/* ---- FLOATING CHEMICAL BOTTLES BACKGROUND ---- */
+.chem-lab-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.chemical-icon {
+  position: absolute;
+  font-size: 42px;
+  opacity: 0.15;
+  animation: floatBottles linear infinite;
+  filter: drop-shadow(0 0 6px rgba(66, 165, 245, 0.3));
+}
+
+/* Floating animation for chemical bottles */
+@keyframes floatBottles {
+  0% {
+    transform: translateY(120vh) rotate(0deg);
+    opacity: 0.05;
+  }
+  25% {
+    opacity: 0.25;
+  }
+  50% {
+    transform: translateY(60vh) rotate(15deg);
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(-20vh) rotate(30deg);
+    opacity: 0.1;
+  }
+}
+
+/* Random positions, speeds, and bottle sizes */
+.chemical-icon:nth-child(1) { left: 10%; animation-duration: 45s; font-size: 55px; }
+.chemical-icon:nth-child(2) { left: 30%; animation-duration: 60s; font-size: 40px; animation-delay: 5s; }
+.chemical-icon:nth-child(3) { left: 50%; animation-duration: 50s; font-size: 48px; animation-delay: 10s; }
+.chemical-icon:nth-child(4) { left: 70%; animation-duration: 65s; font-size: 52px; animation-delay: 15s; }
+.chemical-icon:nth-child(5) { left: 85%; animation-duration: 58s; font-size: 44px; animation-delay: 20s; }
+
+
+
+
+/* ---- SCIENTIST MESSAGE ---- */
+.scientist-message {
+  position: fixed;
+  bottom: 30px;
+  left: 40px;
+  display: flex;
+  align-items: flex-end;
+  z-index: 5;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.scientist-img {
+  width: 120px;
+  height: auto;
+  animation: floatScientist 4s ease-in-out infinite;
+  filter: drop-shadow(0 0 8px rgba(66,165,245,0.6));
+}
+
+/* Floating animation for the scientist */
+@keyframes floatScientist {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* Speech Bubble Style */
+.speech-bubble {
+  background: #ffffff;
+  color: #0a1f44;
+  font-size: 16px;
+  padding: 14px 20px;
+  border-radius: 16px 16px 16px 0;
+  margin-left: 15px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  max-width: 260px;
+  position: relative;
+  animation: bubbleAppear 1s ease-in-out forwards;
+}
+
+/* Bubble pointer */
+.speech-bubble::before {
+  content: "";
+  position: absolute;
+  left: -8px;
+  bottom: 12px;
+  border-width: 8px;
+  border-style: solid;
+  border-color: transparent #ffffff transparent transparent;
+}
+
+/* Bubble animation */
+@keyframes bubbleAppear {
+  0% { opacity: 0; transform: scale(0.7) translateY(20px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Secure Tracking System</title>
+  <link rel="stylesheet" href="batch.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    End-to-End Secure Tracking System for Precursor Chemicals
+  </header>
+
+  <div class="container">
+    <button id="addBatchBtn" class="btn-primary">Add New Batch</button>
+
+    <div id="details">
+      <h3 class="add-head">📋 Batch Details</h3>
+      <div id="batchInfo"></div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div id="batchModal" class="modal">
+    <div class="modal-content scrollable">
+     <div class="batch-card">
+           <h2>Add New Batch</h2>
+    </div>
+      <form id="batchForm">
+        <div class="form-group">
+          <label>Batch ID</label>
+          <input type="text" id="batchId" placeholder="(Auto Generated)" readonly>
+        </div>
+
+        <div class="form-group">
+          <label>Search Precursor</label>
+          <input type="text" id="precursorSearch" placeholder="Search precursor...">
+        </div>
+
+        <div class="form-group">
+          <label>Precursor Type</label>
+          <select id="precursor" size="6">
+            <optgroup label="Pharmaceutical Precursors">
+              <option>Ephedrine</option>
+              <option>Pseudoephedrine</option>
+              <option>Safrole</option>
+              <option>Piperonal</option>
+              <option>P2P (Phenyl-2-Propanone)</option>
+            </optgroup>
+            <optgroup label="Industrial Solvents">
+              <option>Acetone</option>
+              <option>Toluene</option>
+              <option>Ethyl Ether</option>
+            </optgroup>
+            <optgroup label="Acids & Bases">
+              <option>Hydrochloric Acid (HCl)</option>
+              <option>Sulfuric Acid</option>
+              <option>Ammonia</option>
+            </optgroup>
+            <optgroup label="Oxidizers">
+              <option>Potassium Permanganate</option>
+              <option>Hydrogen Peroxide</option>
+              <option>Nitric Acid</option>
+            </optgroup>
+            <optgroup label="Explosive Precursors">
+              <option>Ammonium Nitrate</option>
+              <option>Glycerol</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <div class="form-group qr-box">
+          <label>QR Code Generator</label>
+          <div id="qrcode"></div>
+          <button type="button" id="generateQRBtn" class="btn-primary" style="margin-top:8px;">Generate</button>
+        </div>
+
+        <div class="form-group">
+            <label for="originLocation"> Location</label>
+    <select id="originLocation" name="originLocation">
+      <option value="Pune Maharastra">Pune, Maharashtra</option>
+      <option value="Mumbai Maharastra">Mumbai, Maharashtra</option>
+      <option value="Kolhapur Maharastra">Kolhapur, Maharashtra</option>
+      <option value="Nagpur Maharastra">Nagpur, Maharashtra</option>
+    </select>
+        </div>
+
+        <div class="form-group">
+          <label>Regulatory Approval No.</label>
+          <input type="text" id="approval" placeholder="(Auto Generated)" readonly>
+        </div>
+
+        <div class="form-group">
+          <label>Notes / Observations</label>
+          <textarea id="notes"></textarea>
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="btn-primary">Save</button>
+          <button type="button" id="cancelBtn" class="btn-secondary">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="batch.js"></script>
+</body>
+</html>

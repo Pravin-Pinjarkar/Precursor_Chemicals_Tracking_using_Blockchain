@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Account</title>
+  <link rel="stylesheet" href="profile.css" />
+</head>
+<body>
+
+  <div class="molecule-bg">
+  <div class="molecule"></div>
+  <div class="molecule"></div>
+  <div class="molecule"></div>
+  <div class="molecule"></div>
+  <div class="molecule"></div>
+</div>
+
+<div class="chem-lab-bg">
+  <img src="images/flask.PNG" class="chemical-icon" alt="Flask">
+  <img src="images/chemistry.png" class="chemical-icon" alt="Beaker">
+  <img src="images/testube.png" class="chemical-icon" alt="Test Tube">
+</div> 
+
+
+  <main class="main-content">
+    <!-- Header -->
+    <header class="header-card">
+      <div class="header-left">
+        <h1>My Account</h1>
+      </div>
+      <div class="header-right">
+  <div id="avatar" class="profile-avatar">?</div>
+  <div id="displayName" class="display-name">Loading...</div>
+</div>
+
+
+    </header>
+
+    <!-- Account Section -->
+    <section class="account-section">
+      <div class="account-card">
+        <h2>Profile Information</h2>
+        <div class="info-grid">
+          <div><strong>Full Name:</strong> <span id="acc-name">Loading...</span></div>
+          <div><strong>Email:</strong> <span id="acc-email">Loading...</span></div>
+          <div><strong>Mobile No:</strong> <span id="acc-mobile">Loading...</span></div>
+          <div><strong>Date of Birth:</strong> <span id="acc-dob">Loading...</span></div>
+        </div>
+      </div>
+
+      <div class="upload-section">
+        <label for="profilePicInput" class="upload-btn">Change Profile Picture</label>
+        <input type="file" id="profilePicInput" accept="image/*" style="display:none;">
+      </div>
+    </section>
+  </main>
+
+  <!-- Cartoon Scientist Message Section -->
+<div class="scientist-message">
+  <img src="images/scientist.png" alt="Scientist Character" class="scientist-img">
+  <div class="speech-bubble">
+    <span id="messageText"></span>
+  </div>
+</div>
+
+  <script src="account.js"></script>
+</body>
+</html>

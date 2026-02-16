@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chemical Records</title>
+
+    <link rel="stylesheet" href="chemical.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: url('narcotics.png') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 28px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        #connectBtn {
+            background: #34495e;
+            color: white;
+        }
+
+        #connectBtn:hover {
+            background: #2c3e50;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        #connectBtn.connected {
+            background: #27ae60;
+        }
+
+        #connectBtn.connected:hover {
+            background: #229954;
+        }
+
+        #backBtn {
+            background: #3498db;
+            color: white;
+        }
+
+        #backBtn:hover {
+            background: #2980b9;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .card-wrapper {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .card-content {
+            padding: 30px;
+        }
+
+        .card-title {
+            font-size: 1.8em;
+            color: #1a1a2e;
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+
+        .table-wrapper {
+            background: transparent;
+            border-radius: 0;
+            box-shadow: none;
+            overflow-x: auto;
+        }
+
+        .table-header {
+            background: transparent;
+            padding: 0;
+            border-bottom: none;
+        }
+
+        .table-header h2 {
+            display: none;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1200px;
+        }
+
+        thead tr {
+            background: #f0f0f0;
+            border-bottom: 2px solid #ddd;
+        }
+
+        th {
+            padding: 14px 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #1a1a2e;
+            font-size: 0.9em;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #f0f0f0;
+            color: #333;
+            font-size: 0.85em;
+            word-break: break-word;
+        }
+
+        tbody tr {
+            transition: background-color 0.2s ease;
+        }
+
+        tbody tr:hover {
+            background-color: #fafafa;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #95a5a6;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #1a1a2e;
+            font-weight: 600;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            border: 3px solid #f0f0f0;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #e8f4f8;
+            color: #1a1a2e;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .hash-cell {
+            font-family: 'Courier New', monospace;
+            font-size: 0.8em;
+            max-width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .hash-cell:hover {
+            cursor: help;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.6em;
+            }
+
+            button {
+                padding: 10px 20px;
+                font-size: 0.9em;
+            }
+
+            th, td {
+                padding: 10px 8px;
+                font-size: 0.8em;
+            }
+
+            .card-content {
+                padding: 20px;
+            }
+
+            .card-title {
+                font-size: 1.4em;
+                margin-bottom: 15px;
+            }
+
+            .hash-cell {
+                max-width: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>Chemical Records</h1>
+        </div>
+
+        <div class="button-group">
+            <button id="connectBtn">Connect Wallet</button>
+            <button id="backBtn" onclick="window.location.href='produce.html'">Add New Chemical</button>
+        </div>
+
+        <div class="card-wrapper">
+            <div class="card-content">
+                <h2 class="card-title">Chemical Records</h2>
+                
+                <div class="table-wrapper">
+                    <div class="table-header"></div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Company</th>
+                                <th>Name</th>
+                                <th>Formula</th>
+                                <th>CAS</th>
+                                <th>Quantity</th>
+                                <th>Batch</th>
+                                <th>City</th>
+                                <th>Use Type</th>
+                                <th>Manu Date</th>
+                                <th>Exp Date</th>
+                                <th>Storage</th>
+                                <th>Country</th>
+                                <th>State</th>
+                                <th>Block Number</th>
+                                <th>Transaction Hash</th>
+                            </tr>
+                        </thead>
+                        <tbody id="data">
+                            <tr>
+                                <td colspan="15" class="empty-state">Connect Wallet to Load Data</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+
+    <script>
+    let provider;
+    let signer;
+
+    document.getElementById("connectBtn").onclick = async () => {
+        if (!window.ethereum) {
+            alert("Please install MetaMask!");
+            return;
+        }
+
+        try {
+            provider = new ethers.providers.Web3Provider(window.ethereum);
+            await provider.send("eth_requestAccounts", []);
+            signer = provider.getSigner();
+
+            document.getElementById("connectBtn").textContent = "Wallet Connected";
+            document.getElementById("connectBtn").classList.add("connected");
+            document.getElementById("connectBtn").disabled = true;
+
+            loadChemicals();
+        } catch (error) {
+            console.error("Wallet connection error:", error);
+            alert("Failed to connect wallet");
+        }
+    };
+
+    async function loadChemicals() {
+        const tbody = document.getElementById("data");
+        tbody.innerHTML = `<tr><td colspan="15"><div class="loading"><div class="spinner"></div>Loading...</div></td></tr>`;
+
+        try {
+            // Fetch from backend MongoDB endpoint
+            const response = await fetch("http://localhost:5000/api/chemicals-records");
+            const result = await response.json();
+
+            if (!result.success || result.data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="15" class="empty-state">No records found</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = "";
+
+            result.data.forEach((record) => {
+                const row = `
+                    <tr>
+                        <td>${record.company}</td>
+                        <td>${record.name}</td>
+                        <td><strong>${record.formula}</strong></td>
+                        <td>${record.casNumber}</td>
+                        <td>${record.quantity}</td>
+                        <td>${record.batch}</td>
+                        <td>${record.city}</td>
+                        <td><span class="status-badge">${record.useType}</span></td>
+                        <td>${record.manuDate}</td>
+                        <td>${record.expDate}</td>
+                        <td>${record.storageConditions}</td>
+                        <td>${record.country}</td>
+                        <td>${record.state}</td>
+                        <td>${record.blockNumber}</td>
+                        <td><span class="hash-cell" title="${record.transactionHash}">${record.transactionHash}</span></td>
+                    </tr>
+                `;
+
+                tbody.innerHTML += row;
+            });
+        } catch (error) {
+            console.error("Error loading data:", error);
+            tbody.innerHTML = `<tr><td colspan="15" class="empty-state">Error loading records. Make sure the server is running on http://localhost:5000</td></tr>`;
+        }
+    }
+    </script>
+
+</body>
+</html>

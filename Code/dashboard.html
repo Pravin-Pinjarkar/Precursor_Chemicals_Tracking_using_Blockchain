@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rustic Dashboard</title>
+    <link rel="stylesheet" href="dash.css">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-top">
+            <h2><i class="fa-solid fa-gauge-simple-high"></i> TRACK OPTIONS</h2>
+            <ul class="menu">
+        <li id="proBtn"><a href="produce.html"><i class="fa-solid fa-flask"></i> <span>Order Chemicals</span></a></li>
+<li id="uploadBtn"><a href="upload.html"><i class="fa-solid fa-upload"></i> <span>Upload Documents</span></a></li>
+<li id="trackMenu"><a href="track.html"><i class="fa-solid fa-truck"></i> <span>Track Batches</span></a></li>
+<li id="settingsBtn"><a href="settings.html"><i class="fa-solid fa-gear"></i> <span>Settings</span></a></li>
+<li id="accountBtn"><a href="account.html"><i class="fa-solid fa-user"></i> <span>Account</span></a></li>
+<li id="helpBtn"><a href="help.html"><i class="fa-solid fa-circle-question"></i> <span>Help</span></a></li>
+<li id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> <span>Logout</span></li>
+
+        </ul>
+
+        </div>
+        <img src="newi.webp" alt="Sidebar Illustration" class="sidebar-image">
+    </aside>
+
+    <main class="main-content">
+        <header class="header-card">
+            <div class="header-left">
+                <h1>Dashboard</h1>
+                <button class="priority"><i class="fa-solid fa-people-group"></i> Priority Members</button>
+                <div class="search-box">
+                    <input type="text" placeholder="Search here...">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+                <a href="add_batch.html">
+                    <button class="add-btn"><i class="fa-solid fa-plus"></i> Add new Batch</button>
+                </a>
+            </div>
+            <div class="header-right">
+                <img src="profile.jpg" alt="Profile" class="profile-img">
+            </div>
+        </header>
+
+        <section class="cards">
+            <div class="card">
+                <h3>Precursor Chemicals</h3>
+                <p>ID : 98765432</p>
+                <!-- Dynamic Date -->
+                <p>Date: <span class="card-date"></span></p>
+                <span class="status received">Received</span>
+                <button class="details-btn">See Details</button>
+            </div>
+            <div class="card">
+                <h3>Precursor Chemicals</h3>
+                <p>ID : 12345678</p>
+                <!-- Dynamic Date -->
+                <p>Date: <span class="card-date"></span></p>
+                <span class="status not-received">Not Received</span>
+                <button class="details-btn">See Details</button>
+            </div>
+
+            <!-- ✅ Video Card -->
+            <div class="video-card">
+                <div class="live-badge">🔴 LIVE NOW</div>
+                <h3>Awareness Video</h3>
+                <iframe width="300" height="400"
+                    src="https://www.youtube.com/embed/9DI-iuIXpMU?si=Kwmeq_NqCQqEIqo_" 
+                    title="YouTube video player" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    referrerpolicy="strict-origin-when-cross-origin" 
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </section>
+
+        <section class="pending">
+            <h3><i class="fa-solid fa-clock"></i> Pending NOC Requests</h3>
+            <p>TD num : 12345678</p>
+            <button class="view-btn">View More</button>
+        </section>
+
+        <section class="invoice">
+            <h3><i class="fa-solid fa-file-invoice"></i> Invoice</h3>
+            <p>Batch ID: 123-456-7890</p>
+            <p>Status: <span class="status active">Active</span></p>
+            <button class="details-btn">See Details</button>
+        </section>
+    </main>
+
+    <!-- Role Selection Modal -->
+    <div id="roleModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Select Role</h2>
+            <ul class="role-list">
+                <li>Chemical Industry Owner</li>
+                <li>Distributor</li>
+                <li>Lab Assistant</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Role Description Modal -->
+    <div id="roleDescModal" class="modal">
+        <div class="modal-content description-box">
+            <span class="close desc-close">&times;</span>
+            <h2 id="roleTitle"></h2>
+            <p id="roleDescription"></p>
+        </div>
+    </div>
+
+
+    <script src="script.js"></script>
+
+    <script>
+document.addEventListener("DOMContentLoaded", async () => {
+  const token = localStorage.getItem("authToken");
+  if (!token) return;
+
+  try {
+    const res = await fetch("http://localhost:5000/api/user-profile", {
+      headers: { "Authorization": `Bearer ${token}` }
+    });
+    const user = await res.json();
+
+    if (user.role !== "Chemical Industry Owner") {
+      const trackMenu = document.getElementById("trackMenu");
+      if (trackMenu) trackMenu.style.display = "none";
+    }
+  } catch (err) {
+    console.log("Role fetch error", err);
+  }
+});
+</script>
+
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const logoutBtn = document.getElementById("logoutBtn");
+
+  if (logoutBtn) {
+    logoutBtn.style.cursor = "pointer"; // 👈 ensures pointer icon
+
+    logoutBtn.addEventListener("click", () => {
+      showConfirmToast("Are you sure you want to log out?", () => {
+        showToast("✅ Logged out successfully!", "success");
+        setTimeout(() => {
+          localStorage.removeItem("authToken"); // optional but recommended
+          window.location.href = "Main.html";
+        }, 1500);
+      }, () => showToast("❌ Logout cancelled", "error"));
+    });
+  }
+});
+</script>
+
+
+
+
+<script>
+const settings = JSON.parse(localStorage.getItem("ncbSettings")) || {};
+
+// Dark mode UI
+if (settings.themeMode === "dark") {
+  document.body.classList.add("dark-mode");
+}
+
+// OTP login requirement
+if (settings.twoFA) {
+  console.log("2FA Enabled → always require OTP");
+}
+
+// Auto refresh
+if (settings.refresh > 0) {
+  setInterval(() => location.reload(), settings.refresh * 60 * 1000);
+}
+
+</script>
+
+
+<script>
+// use existing settings (do NOT redeclare)
+const lang = (settings.language || "English").toLowerCase();
+
+const translations = {
+  english: ["Dashboard", "Produce Chemicals", "Upload Documents", "Track Batches", "Settings", "Account", "Help"],
+  hindi: ["डैशबोर्ड", "रसायन उत्पादन", "दस्तावेज़ अपलोड", "बैच ट्रैक करें", "सेटिंग्स", "खाता", "मदद"],
+  marathi: ["डॅशबोर्ड", "रसायने तयार करा", "दस्तऐवज अपलोड", "बॅच ट्रॅक करा", "सेटिंग", "खाते", "मदत"]
+};
+
+// update Dashboard title
+document.querySelector("h1").textContent = translations[lang][0];
+
+// sidebar text
+const labels = [
+  "#proBtn span",
+  "#uploadBtn span",
+  "#trackMenu span",
+  "#settingsBtn span",
+  "#accountBtn span",
+  "#helpBtn span"
+];
+
+labels.forEach((selector, index) => {
+  const el = document.querySelector(selector);
+  if (el) el.textContent = translations[lang][index + 1];
+});
+</script>
+
+
+</body>
+</html>

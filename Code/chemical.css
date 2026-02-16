@@ -1,0 +1,133 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: url("narcotics.png") no-repeat center center fixed;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.form-container {
+  background: #122b57;
+  border-radius: 20px;
+  margin-top: 30px;
+  padding: 30px 40px;
+  margin-bottom: 20px;
+  width: 450px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  animation: fadeIn 1s ease-in-out;
+}
+
+.form-container h2 {
+  text-align: center;
+  color: white;
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: white;
+}
+
+.form-group input, 
+.form-group textarea, 
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.form-group input:focus, 
+.form-group textarea:focus, 
+.form-group select:focus {
+  border-color: #4facfe;
+  box-shadow: 0 0 8px rgba(79, 172, 254, 0.4);
+  outline: none;
+}
+
+.form-group textarea {
+  resize: none;
+  height: 80px;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 25px;
+  background: linear-gradient(135deg, #60f3aa, #06804d);
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.submit-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+}
+
+@keyframes fadeIn {
+  from {opacity: 0; transform: translateY(-20px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+
+/* Error messages */
+.error {
+  color: red;
+  font-size: 13px;
+  margin-top: 4px;
+  display: none;
+}
+
+/* Shake animation */
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+}
+
+.shake {
+  animation: shake 0.3s;
+  border-color: red !important;
+}
+
+/* Toast notification */
+#toast {
+  position: fixed;
+  top: 20px;              /* show at top */
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 300px;
+  background: #4caf50;
+  color: #fff;
+  text-align: center;
+  border-radius: 8px;
+  padding: 14px 20px;
+  z-index: 9999;
+  font-size: 16px;
+  font-weight: 500;
+  opacity: 0;
+  pointer-events: none;   /* don't block clicks */
+  transition: opacity 0.5s ease-in-out;
+}
+
+#toast.show {
+  opacity: 1;
+}

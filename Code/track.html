@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Batch Tracking</title>
+  <link rel="stylesheet" href="track.css">
+  <style>
+    .header-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .anomaly-btn {
+      padding: 8px 20px;
+      background: #e74c3c;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+
+    .anomaly-btn:hover {
+      background: #c0392b;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 20px;
+      color: #666;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <div class="header-wrapper">
+        <h1>Batch Tracking</h1>
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <select id="yearSelect" class="year-dropdown">
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025" selected>2025</option>
+          </select>
+          <button class="anomaly-btn" onclick="window.location.href='anomaly.html'">Anomaly Detection</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Batch List -->
+    <section class="card">
+      <h2>Batch List</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Batch ID</th>
+            <th>Regulatory Approval No.</th>
+            <th>Chemical</th>
+            <th>Quantity</th>
+            <th>Date Produced</th>
+            <th>Note</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="batchTableBody">
+          <tr>
+            <td colspan="7" class="loading">Loading data...</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Chart -->
+    <section class="card">
+      <h2>Batch Production Trends</h2>
+      <div class="chart-container">
+        <svg id="chart" width="100%" height="300"></svg>
+      </div>
+    </section>
+  </div>
+
+  <!-- Tooltip -->
+  <div id="tooltip" class="tooltip"></div>
+
+  <script src="track.js"></script>
+  <script>
+    // Hardcoded data for other years
+    const hardcodedData = {
+      2020: [
+        { batchId: 'B-001', approval: 'RAN-401', chemical: 'Ephedrine', quantity: '120 kg', date: '15 Mar 2020', note: 'Standard', status: 'completed' },
+        { batchId: 'B-002', approval: 'RAN-402', chemical: 'Pseudoephedrine', quantity: '150 kg', date: '20 Mar 2020', note: 'Quality Check', status: 'completed' },
+      ],
+      2021: [
+        { batchId: 'B-025', approval: 'RAN-425', chemical: 'Nitric Acid', quantity: '200 kg', date: '10 Feb 2021', note: 'Standard', status: 'completed' },
+        { batchId: 'B-026', approval: 'RAN-426', chemical: 'Hydrogen Peroxide', quantity: '175 kg', date: '18 Feb 2021', note: 'Quality Check', status: 'completed' },
+      ],
+      2022: [
+        { batchId: 'B-050', approval: 'RAN-450', chemical: 'Ephedrine', quantity: '140 kg', date: '05 Jan 2022', note: 'Standard', status: 'completed' },
+        { batchId: 'B-051', approval: 'RAN-451', chemical: 'Sodium Hydroxide', quantity: '180 kg', date: '12 Jan 2022', note: 'Quality Check', status: 'completed' },
+      ],
+      2023: [
+        { batchId: 'B-075', approval: 'RAN-475', chemical: 'Pseudoephedrine', quantity: '160 kg', date: '08 Jul 2023', note: 'Standard', status: 'completed' },
+        { batchId: 'B-076', approval: 'RAN-476', chemical: 'Nitric Acid', quantity: '190 kg', date: '15 Jul 2023', note: 'Quality Check', status: 'completed' },
+      ],
+      2024: [
+        { batchId: 'B-100', approval: 'RAN-500', chemical: 'Ephedrine', quantity: '130 kg', date: '22 Nov 2024', note: 'Standard', status: 'completed' },
+        { batchId: 'B-101', approval: 'RAN-501', chemical: 'Hydrogen Peroxide', quantity: '170 kg', date: '28 Nov 2024', note: 'Quality Check', status: 'active' },
+      ],
+    };
+
+    const batchCounter = { value: 101 };
+    const approvalCounter = { value: 501 };
+
+    document.getElementById('yearSelect').addEventListener('change', (e) => {
+      loadBatches(e.target.value);
+    });
+
+    async function loadBatches(year) {
+      const tbody = document.getElementById('batchTableBody');
+      
+      try {
+        if (year === '2025') {
+          // Fetch from database for 2025
+          const response = await fetch('http://localhost:5000/api/chemicals-records');
+          const result = await response.json();
+
+          if (result.success && result.data.length > 0) {
+            tbody.innerHTML = '';
+            result.data.forEach((rec, idx) => {
+              const row = document.createElement('tr');
+              const dateObj = new Date(rec.createdAt);
+              const formattedDate = dateObj.toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: '2-digit' });
+              
+              row.innerHTML = `
+                <td>B-${101 + idx}</td>
+                <td>RAN-${501 + idx}</td>
+                <td>${rec.name}</td>
+                <td>${rec.quantity} kg</td>
+                <td>${formattedDate}</td>
+                <td>${rec.useType}</td>
+                <td><span class="status active">Active</span></td>
+              `;
+              tbody.appendChild(row);
+            });
+          } else {
+            tbody.innerHTML = '<tr><td colspan="7" class="loading">No batches recorded for 2025</td></tr>';
+          }
+        } else {
+          // Use hardcoded data for other years
+          const yearData = hardcodedData[year] || [];
+          tbody.innerHTML = '';
+          
+          if (yearData.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="7" class="loading">No data available</td></tr>';
+            return;
+          }
+
+          yearData.forEach(batch => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${batch.batchId}</td>
+              <td>${batch.approval}</td>
+              <td>${batch.chemical}</td>
+              <td>${batch.quantity}</td>
+              <td>${batch.date}</td>
+              <td>${batch.note}</td>
+              <td><span class="status ${batch.status}">${batch.status.charAt(0).toUpperCase() + batch.status.slice(1)}</span></td>
+            `;
+            tbody.appendChild(row);
+          });
+        }
+      } catch (error) {
+        console.error('Error loading batches:', error);
+        tbody.innerHTML = '<tr><td colspan="7" class="loading">Error loading batches. Make sure server is running.</td></tr>';
+      }
+    }
+
+    // Load 2025 data on page load
+    loadBatches('2025');
+
+    // Auto-refresh every 10 seconds for real-time updates
+    setInterval(() => {
+      const selectedYear = document.getElementById('yearSelect').value;
+      if (selectedYear === '2025') {
+        loadBatches('2025');
+      }
+    }, 10000);
+  </script>
+</body>
+</html>

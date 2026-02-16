@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="left-panel">
+            <div class="info-card">
+                <img src="ncb.png" alt="NCB Logo" class="ncb-logo">
+                <h1 class="logo">NARCOTICS CONTROL BUREAU</h1>
+                <p class="desc">Sign up to access the NCB portal.</p>
+            </div>
+        </div>
+
+        <div class="right-panel">
+            <div class="form-card">
+                <h2>Create Account</h2>
+                <p class="form-subtitle">Already Registered? <a href="login.html">Login</a></p>
+
+                <label>Full Name</label>
+                <input type="text" id="name" placeholder="Your Name" required>
+
+                <label>Email</label>
+                <input type="email" id="create-email" placeholder="hello@reallygreatsite.com" required>
+                <small id="create-email-error" class="error"></small>
+
+                <label>Password</label>
+                <div class="password-wrapper">
+                    <input type="password" id="password" placeholder="Password" required>
+                    <span class="toggle-password" onclick="togglePassword('password', this)">👁</span>
+                </div>
+                <small id="create-password-error" class="error"></small>
+
+                <label>Mobile No</label>
+                <input type="text" id="mobile" placeholder="Enter 10-digit Mobile Number" required>
+                <small id="mobile-error" class="error"></small>
+
+                <label>Date of Birth</label>
+                <input type="date" id="dob" required>
+                <small id="dob-error" class="error"></small>
+
+                <!-- 🔥 Added Select Role -->
+                <label>Select Role</label>
+                <select id="role" required>
+                    <option value="">-- Select Role --</option>
+                    <option value="Chemical Industry Owner">Chemical Industry Owner</option>
+                    <option value="Distributor">Distributor</option>
+                    <option value="Lab Assistant">Lab Assistant</option>
+                </select>
+                <small id="role-error" class="error"></small>
+
+                <button class="action-btn" onclick="validateCreate(event)">Sign Up</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

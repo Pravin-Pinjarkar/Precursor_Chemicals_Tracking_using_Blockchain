@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NCB Login</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container">
+
+        <!-- Left Card for NCB Info -->
+        <div class="left-panel">
+            <div class="info-card">
+                <img src="ncb.png" alt="NCB Logo" class="ncb-logo">
+                <h1 class="logo-title">NARCOTICS CONTROL BUREAU</h1>
+                <p class="info-desc">
+                    Official portal to check and verify whether your chemical products meet the legal requirements before transportation.
+                </p>
+                <button id="learnMoreBtn" class="learn-btn" aria-expanded="false">Learn More</button>
+
+                 
+                <!-- Learn More List -->
+                <ul id="learn-more-list" class="hidden" aria-hidden="true">
+                   <h2 class="heading-title">Chemicals Tracking Processs</h2>
+                    <li>End-to-End Tracking</li>
+                    <li>ID Verification and Document Upload</li>
+                    <li>Anomaly Detection</li>
+                    <li>Centralized Dashboard</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Right Card for Login -->
+        <div class="right-panel">
+            <div class="form-card">
+                <h2>Sign In</h2>
+                <p class="subtitle">Welcome back! Please login to your account.</p>
+
+                <!-- Email -->
+                <label>Email</label>
+                <input type="email" id="email" placeholder="hello@reallygreatsite.com" required>
+                <small id="email-error" class="error"></small>
+
+                <!-- Password -->
+                <label>Password</label>
+                <div class="password-wrapper">
+                    <input type="password" id="password" placeholder="Password" required>
+                    <span class="toggle-password" onclick="togglePassword('password', this)">👁</span>
+                </div>
+                <small id="password-error" class="error"></small>
+
+                <!-- Login Button -->
+                <button class="action-btn" onclick="validateLogin(event)">Login</button>
+
+                <!-- Extra Links -->
+                <div class="extra-links">
+                    <a href="create.html">Create Account</a> | 
+                    <a href="forgot.html">Forgot Password?</a>
+                </div>
+
+                <!-- Success Message -->
+                <!-- <p id="success-message" style="color: green; display: none; margin-top: 10px;">
+                    ✅ Login Successful!
+                </p> -->
+            </div>
+        </div>
+
+    </div>
+
+   <!-- OTP Modal -->
+<!-- OTP Modal -->
+<div id="otpModal" class="otp-modal hidden">
+  <div class="otp-box">
+    <h3>🔐 Email Verification</h3>
+    <p class="otp-subtitle">Enter the 6-digit OTP sent to your email</p>
+
+    <div class="otp-inputs">
+      <input type="text" maxlength="1" class="otp-digit" />
+      <input type="text" maxlength="1" class="otp-digit" />
+      <input type="text" maxlength="1" class="otp-digit" />
+      <input type="text" maxlength="1" class="otp-digit" />
+      <input type="text" maxlength="1" class="otp-digit" />
+      <input type="text" maxlength="1" class="otp-digit" />
+    </div>
+
+    <p id="otpError" class="otp-error hidden">❌ Invalid OTP. Please try again.</p>
+
+    <button id="verifyOtpBtn" class="action-btn full">Verify OTP</button>
+    <button id="resendOtpBtn" class="resend-btn">Resend OTP</button>
+    <button id="cancelOtpBtn" class="cancel-btn">Cancel</button>
+  </div>
+</div>
+
+
+
+    <script src="script.js"></script>
+</body>
+</html>

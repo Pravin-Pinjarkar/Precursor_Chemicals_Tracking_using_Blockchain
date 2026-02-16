@@ -1,0 +1,123 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f8fc;
+  margin: 20px;
+  background: url("cont.png");
+
+  background-size: auto;   
+  /* background-attachment: scroll; /* ensures it scrolls with page */
+
+  /* min-width: 100vw;         allow horizontal scroll if image wider */
+  /* min-height: 100vh;        allow vertical scroll if image taller */
+  /* overflow: auto;      */ 
+}
+
+/* Heading Card */
+.heading-card {
+  width: 25%;
+  margin: 30px auto;
+  padding: 15px;
+  background: #002147;
+  border-radius: 12px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* Animated Border Effect */
+.heading-card::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: 14px;
+  background: linear-gradient(45deg, #facc15, #ffd700, #ffed4a, #facc15);
+  background-size: 300% 300%;
+  z-index: -1;
+  animation: borderGlow 5s linear infinite;
+}
+
+@keyframes borderGlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Heading Text */
+.heading-card h2 {
+  margin: 0;
+  padding: 20px;
+  font-size: 26px;
+  color: #fff;
+  text-shadow: 0 0 5px #facc15, 0 0 10px #facc15, 0 0 20px #facc15;
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+/* Glow Animation */
+@keyframes glow {
+  from {
+    text-shadow: 0 0 5px #facc15, 0 0 10px #facc15, 0 0 20px #facc15;
+  }
+  to {
+    text-shadow: 0 0 10px #ffd700, 0 0 20px #ffd700, 0 0 30px #ffd700;
+  }
+}
+
+/* Table */
+table {
+  width: 80%;
+  height: 150px;
+  margin: 60px auto;
+  border-collapse: collapse;
+  background: white;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: center;
+}
+
+th {
+  background: #002147;
+  color: white;
+}
+
+
+tr:nth-child(even) {
+  background: #f9f9f9;
+ 
+}
+
+img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Button (kept in case you need later) */
+.contact {
+  text-align: center;
+  margin-top: 20px;
+}
+.contact button {
+  background-color: #002147;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.contact button:hover {
+  background-color: #004080;
+}
+
+
+
+

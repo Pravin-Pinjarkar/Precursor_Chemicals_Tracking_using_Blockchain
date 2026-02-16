@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Advanced Anomaly Detection (Frontend)</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Arial, sans-serif;background:#f5f5f5;padding:18px}
+    .container{max-width:1200px;margin:0 auto}
+    header{background:#fff;padding:18px;border-radius:8px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 6px rgba(0,0,0,.06)}
+    header h1{font-size:1.6em;color:#222}
+    .btn-back{padding:8px 16px;background:#3498db;color:#fff;border:0;border-radius:6px;cursor:pointer}
+    .card{background:#fff;padding:16px;margin-top:16px;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,.06)}
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:12px}
+    .stat{background:#fafafa;padding:12px;border-left:4px solid #3498db;border-radius:6px}
+    .stat .label{color:#666;font-size:.85em}
+    .stat .num{font-size:1.6em;font-weight:700;color:#222;margin-top:6px}
+    table{width:100%;border-collapse:collapse;margin-top:12px}
+    thead tr{background:#f6f6f6}
+    th,td{padding:10px;border-bottom:1px solid #eee;text-align:left;font-size:.95em;vertical-align:top}
+    tr.anomaly-row{background:#fff3cd}
+    .status{display:inline-block;padding:6px 10px;border-radius:6px;font-weight:700;font-size:.85em}
+    .status.normal{background:#e8f7ea;color:#1b6a37}
+    .status.flagged{background:#fdecea;color:#7a1a1a}
+    .status.critical{background:#b71c1c;color:#fff}
+    .small{font-size:.85em;color:#666}
+    .cfg{display:flex;gap:12px;flex-wrap:wrap}
+    .cfg label{display:flex;flex-direction:column;font-size:.85em;color:#333}
+    .cfg input[type="number"], .cfg input[type="range"], .cfg select{padding:6px;border-radius:6px;border:1px solid #ddd;margin-top:6px}
+    .pill{background:#f1f1f1;padding:6px 10px;border-radius:20px;font-weight:700;font-size:.85em}
+    .reasons{color:#333;font-size:.9em}
+    .det-list{font-size:.85em;color:#444}
+    .muted{color:#777;font-size:.85em}
+    .code{font-family:monospace;background:#f0f0f0;padding:6px;border-radius:6px}
+    td.reason-cell{max-width:320px;white-space:pre-wrap}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Advanced Frontend Anomaly Detection</h1>
+      <div>
+        <button class="btn-back" onclick="window.history.back()">Back to Tracking</button>
+      </div>
+    </header>
+
+    <div class="card">
+      <h2>Configuration (tune thresholds)</h2>
+      <div class="cfg">
+        <label>Z-score threshold (flag level)
+          <input id="cfg_z" type="number" min="1" max="10" step="0.1" value="2">
+        </label>
+        <label>IQR multiplier (1.5 = standard)
+          <input id="cfg_iqr_mul" type="number" min="0.5" max="5" step="0.1" value="1.5">
+        </label>
+        <label>Rolling window size (batches per chemical)
+          <input id="cfg_roll_n" type="number" min="2" max="50" step="1" value="6">
+        </label>
+        <label>Sudden change ratio (e.g. 0.4 = 40%)
+          <input id="cfg_sudden" type="number" min="0.05" max="1" step="0.01" value="0.4">
+        </label>
+        <label>Combined score threshold (0-1)
+          <input id="cfg_comb" type="number" min="0" max="1" step="0.01" value="0.60">
+        </label>
+        <label>Auto-refresh (secs)
+          <input id="cfg_interval" type="number" min="3" max="300" step="1" value="10">
+        </label>
+      </div>
+
+      <div style="margin-top:10px" class="muted">
+        This frontend analyzes fields returned by your API (name, quantity, company, city, timestamp, manuDate, expDate, cas, formula) and computes multiple detectors per row.
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Summary</h2>
+      <div class="stats-grid">
+        <div class="stat">
+          <div class="label">Total Batches</div>
+          <div class="num" id="totalBatches">0</div>
+        </div>
+        <div class="stat">
+          <div class="label">Anomalies Detected</div>
+          <div class="num" id="anomalyCount">0</div>
+        </div>
+        <div class="stat">
+          <div class="label">Normal Batches</div>
+          <div class="num" id="normalCount">0</div>
+        </div>
+        <div class="stat">
+          <div class="label">Anomaly Rate</div>
+          <div class="num" id="anomalyRate">0%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Detailed Report</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Batch ID</th>
+            <th>Chemical</th>
+            <th>Formula / CAS</th>
+            <th>Qty (kg)</th>
+            <th>Company</th>
+            <th>City</th>
+            <th>Expiry</th>
+            <th>Score</th>
+            <th>Status</th>
+            <th>Top Reasons</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <tr><td colspan="10" class="small">Loading analysis...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>Per-detector definitions (for transparency)</h2>
+      <ul class="det-list">
+        <li><strong>Z-score:</strong> Standardized distance from chemical mean (univariate).</li>
+        <li><strong>IQR rule:</strong> IQR-based outlier check (chemical-specific).</li>
+        <li><strong>Company-bias:</strong> Deviation vs company-specific median for that chemical.</li>
+        <li><strong>City-context:</strong> Deviation vs city-specific median for that chemical.</li>
+        <li><strong>Rolling sudden-change:</strong> Change vs recent rolling median for the chemical.</li>
+        <li><strong>Frequency / Burst:</strong> Many entries from same company/timestamp window.</li>
+        <li><strong>Multivariate distance:</strong> Euclidean distance after standardizing numeric features (quantity, hour, dow).</li>
+        <li><strong>Expiry checks:</strong> Expired / Near-expiry warnings.</li>
+        <li><strong>Precursor list:</strong> 7 critical precursors force CRITICAL status.</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+  // ========== CONFIG ===========
+  const DATA_API = 'http://localhost:5000/api/chemicals-records'; // your Mongo-backed API
+
+  // 7 precursor chemicals (critical) with formulas (lowercase names used for matching)
+  const PRECURSORS = [
+    {name: "ammonium nitrate", formula: "NH4NO3"},
+    {name: "nitric acid", formula: "HNO3"},
+    {name: "sulphuric acid", formula: "H2SO4"},
+    {name: "hydrogen peroxide", formula: "H2O2"},
+    {name: "potassium permanganate", formula: "KMnO4"},
+    {name: "acetone", formula: "C3H6O"},
+    {name: "urea", formula: "CH4N2O"}
+  ];
+
+  // suspicious chemical combination pairs that are risky if present together in short window
+  const SUSPICIOUS_COMBOS = [
+    ["acetone", "hydrogen peroxide"], // known dangerous mixture patterns
+    ["ammonium nitrate", "fuel oil"], // fuel oil name might appear as "fuel oil" or "diesel"
+    // add more pairs as needed
+  ];
+
+  // helpers
+  const $ = id => document.getElementById(id);
+  const cfg = () => ({
+    zThr: Number($('cfg_z').value),
+    iqrMul: Number($('cfg_iqr_mul').value),
+    rollN: Number($('cfg_roll_n').value),
+    suddenRatio: Number($('cfg_sudden').value),
+    combThr: Number($('cfg_comb').value),
+    interval: Number($('cfg_interval').value) * 1000
+  });
+
+  function mean(arr){ return arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : 0; }
+  function median(arr){
+    if(!arr.length) return 0;
+    const s = [...arr].sort((a,b)=>a-b);
+    const m = Math.floor((s.length-1)/2);
+    return s.length%2 ? s[m] : (s[m]+s[m+1])/2;
+  }
+  function std(arr, ddof=0){
+    if(arr.length<=ddof) return 0;
+    const m = mean(arr);
+    const v = arr.reduce((s,x)=>s+Math.pow(x-m,2),0)/(arr.length - ddof);
+    return Math.sqrt(v);
+  }
+  function quantile(arr,q){
+    if(!arr.length) return 0;
+    const s = [...arr].sort((a,b)=>a-b);
+    const idx = (s.length-1)*q; const lo = Math.floor(idx), hi = Math.ceil(idx);
+    if(lo===hi) return s[lo];
+    return s[lo] + (s[hi]-s[lo])*(idx-lo);
+  }
+  function parseDateSafe(s){
+    if(!s) return null;
+    const d = new Date(s);
+    return isNaN(d) ? null : d;
+  }
+  function isCASValidFormat(cas){
+    if(!cas) return false;
+    // basic CAS check: digits-digits-digit (not rigorous)
+    return /^\d{2,7}-\d{2}-\d$/.test(cas.trim());
+  }
+
+  // prepare rows from API -> normalized fields
+  function prepare(df){
+    const map = r => Object.assign({
+      batchId: r.batchId || r.batch || null,
+      name: (r.name || r.chemical || "UNKNOWN").toString().trim(),
+      formula: (r.formula || r.chemicalFormula || "").toString().trim(),
+      cas: (r.cas || r.CAS || "").toString().trim(),
+      quantity: Number(r.quantity) || 0,
+      company: (r.company || "UNKNOWN").toString().trim(),
+      city: (r.city || "UNKNOWN").toString().trim(),
+      timestamp: r.timestamp || r.createdAt || null,
+      manuDate: r.manuDate || r.manufactureDate || null,
+      expDate: r.expDate || r.expiryDate || null,
+      storage: r.storage || r.storageConditions || "",
+      useType: r.useType || r.purpose || "",
+      raw: r
+    }, r);
+    const out = df.map(map);
+    out.forEach(r=>{
+      r._ts = parseDateSafe(r.timestamp);
+      r._manu = parseDateSafe(r.manuDate);
+      r._exp = parseDateSafe(r.expDate);
+      r.hour = r._ts ? r._ts.getHours() : 0;
+      r.dow = r._ts ? r._ts.getDay() : 0;
+      r.name_l = r.name.toLowerCase();
+    });
+    return out;
+  }
+
+  // compute group stats
+  function computeStats(rows){
+    const byChem = {}, byChemCo = {}, byChemCity = {};
+    rows.forEach(r=>{
+      const ch = r.name_l;
+      byChem[ch] = byChem[ch] || []; byChem[ch].push(r.quantity);
+      const kco = ch + '||' + r.company; byChemCo[kco] = byChemCo[kco] || []; byChemCo[kco].push(r.quantity);
+      const kcity = ch + '||' + r.city; byChemCity[kcity] = byChemCity[kcity] || []; byChemCity[kcity].push(r.quantity);
+    });
+
+    const chemStats = {};
+    Object.keys(byChem).forEach(ch=>{
+      const arr = byChem[ch];
+      const m = mean(arr); const s = std(arr,0);
+      const q1 = quantile(arr,0.25), q3 = quantile(arr,0.75), iqr = q3-q1;
+      chemStats[ch] = {count:arr.length, mean:m, std:s, q1,q3,iqr,median:median(arr), arr};
+    });
+
+    const chemCoStats = {};
+    Object.keys(byChemCo).forEach(k=>{
+      const arr = byChemCo[k]; chemCoStats[k] = {median:median(arr),count:arr.length};
+    });
+    const chemCityStats = {};
+    Object.keys(byChemCity).forEach(k=>{
+      const arr = byChemCity[k]; chemCityStats[k] = {median:median(arr),count:arr.length};
+    });
+
+    return {chemStats, chemCoStats, chemCityStats};
+  }
+
+  // build rolling per-chemical (sorted by timestamp)
+  function buildRolling(rows){
+    const byChem = {};
+    rows.forEach(r=>{
+      const ch = r.name_l;
+      byChem[ch] = byChem[ch] || [];
+      byChem[ch].push(r);
+    });
+    Object.keys(byChem).forEach(ch=>{
+      byChem[ch].sort((a,b)=> (a._ts? a._ts.getTime():0) - (b._ts? b._ts.getTime():0));
+    });
+    return byChem;
+  }
+
+  // main analyzer
+  function analyzeRows(rows){
+    const conf = cfg();
+    const stats = computeStats(rows);
+    const roll = buildRolling(rows);
+    const hours = rows.map(r=>r.hour||0), dows = rows.map(r=>r.dow||0);
+    const hourMean = mean(hours), hourStd = Math.max(1,std(hours,0));
+    const dowMean = mean(dows), dowStd = Math.max(1,std(dows,0));
+
+    // helper to detect suspicious combos in last X days (default 7)
+    function hasSuspiciousComboForRow(r, daysWindow=7){
+      const lower = (new Date(r._ts || Date.now())).getTime() - daysWindow*24*3600*1000;
+      const recent = rows.filter(rr => (rr._ts? rr._ts.getTime() : 0) >= lower);
+      for(const pair of SUSPICIOUS_COMBOS){
+        const foundA = recent.some(x => x.name_l === pair[0]);
+        const foundB = recent.some(x => x.name_l === pair[1]);
+        if(foundA && foundB) return true;
+      }
+      return false;
+    }
+
+    const results = rows.map((r, idx) => {
+      const ch = r.name_l;
+      const cs = stats.chemStats[ch] || {mean:0,std:1,iqr:0,q1:0,q3:0,median:0,arr:[]};
+
+      // DETECTOR A: z-score
+      const zDen = cs.std > 1e-9 ? cs.std : 1;
+      const z = (r.quantity - cs.mean)/zDen;
+      const zAbs = Math.abs(z);
+      const zFlag = zAbs >= conf.zThr;
+
+      // DETECTOR B: IQR
+      const lower = cs.q1 - conf.iqrMul * cs.iqr;
+      const upper = cs.q3 + conf.iqrMul * cs.iqr;
+      const iqrFlag = (r.quantity < lower) || (r.quantity > upper);
+
+      // DETECTOR C: company vs chemical median
+      const kco = ch + '||' + r.company;
+      const coStats = stats.chemCoStats[kco];
+      let coDeviation=0, coFlag=false;
+      if(coStats){
+        const med = coStats.median || cs.median || 0;
+        const denom = med || (cs.median || 1);
+        coDeviation = Math.abs(r.quantity - med)/Math.max(1,denom);
+        coFlag = coDeviation > 0.5 && coStats.count >= 3;
+      }
+
+      // DETECTOR D: city vs chemical median
+      const kcity = ch + '||' + r.city;
+      const cityStats = stats.chemCityStats[kcity];
+      let cityDeviation=0, cityFlag=false;
+      if(cityStats){
+        const med = cityStats.median || cs.median || 0;
+        const denom = med || (cs.median || 1);
+        cityDeviation = Math.abs(r.quantity - med)/Math.max(1,denom);
+        cityFlag = cityDeviation > 0.5 && cityStats.count >= 3;
+      }
+
+      // DETECTOR E: rolling sudden change
+      const recentList = roll[ch] || [];
+      const prev = recentList.filter(x => x._ts && r._ts ? x._ts.getTime() < r._ts.getTime() : false).slice(-conf.rollN);
+      const prevQuant = prev.map(x=>x.quantity);
+      const prevMed = prevQuant.length ? median(prevQuant) : null;
+      let suddenFlag=false, suddenRatio=0;
+      if(prevMed !== null){
+        suddenRatio = Math.abs(r.quantity - prevMed)/Math.max(1,prevMed);
+        suddenFlag = suddenRatio >= conf.suddenRatio && prevQuant.length >= 3;
+      }
+
+      // DETECTOR F: frequency / burst (same company within hour)
+      const sameWindowCount = rows.filter(x=>{
+        if(x.company !== r.company) return false;
+        if(!r._ts || !x._ts) return false;
+        const diff = Math.abs(r._ts.getTime() - x._ts.getTime());
+        return diff <= (1000*60*60); // 1 hour
+      }).length;
+      const burstFlag = sameWindowCount >= 4;
+
+      // DETECTOR G: multivariate standardized Euclidean distance
+      const qMean = cs.mean || mean(rows.map(rr=>rr.quantity));
+      const qStd = Math.max(1, cs.std || std(rows.map(rr=>rr.quantity)));
+      const qS = (r.quantity - qMean)/qStd;
+      const hS = (r.hour - hourMean)/hourStd;
+      const dS = (r.dow - dowMean)/dowStd;
+      const mDist = Math.sqrt(qS*qS + hS*hS + dS*dS);
+
+      // Expiry checks
+      const today = new Date();
+      let expStatus = "OK", expFlag=0;
+      if(r._exp){
+        const diffDays = Math.ceil((r._exp - today)/(1000*60*60*24));
+        if(diffDays < 0){ expStatus = "Expired"; expFlag=1; }
+        else if(diffDays <= 30){ expStatus = `Near Expiry (${diffDays}d)`; expFlag=0.6; }
+      } else { expStatus = "No expiry info"; }
+
+      // CAS format check
+      const casOk = isCASValidFormat(r.cas);
+
+      // Precursor check (critical)
+      const isPrecursor = PRECURSORS.some(p => p.name.toLowerCase() === ch || p.formula.toLowerCase() === (r.formula||"").toLowerCase());
+      // suspicious combo check (in recent window default 7 days)
+      const comboDetected = hasSuspiciousComboForRow(r, 7);
+
+      // normalize/scale detectors 0..1
+      let zScaled = 0;
+      if (zAbs <= conf.zThr) zScaled = (zAbs / conf.zThr) * 0.6;
+      else if (zAbs <= conf.zThr*2) zScaled = 0.6 + ((zAbs - conf.zThr) / conf.zThr) * 0.25;
+      else zScaled = Math.min(1, 0.85 + (zAbs - conf.zThr*2)/ (conf.zThr*4));
+
+      const iqrScaled = iqrFlag ? 0.9 : Math.min(0.35, Math.abs((r.quantity - cs.median || 0) / Math.max(1, cs.iqr || 1)) * 0.15);
+      const coScaled = coFlag ? Math.min(1, coDeviation) : Math.min(0.3, coDeviation * 0.3);
+      const cityScaled = cityFlag ? Math.min(1, cityDeviation) : Math.min(0.25, cityDeviation * 0.2);
+      const suddenScaled = suddenFlag ? Math.min(1, suddenRatio) : Math.min(0.25, suddenRatio * 0.25);
+      const burstScaled = burstFlag ? 0.8 : Math.min(0.25, (sameWindowCount/10));
+      let mScaled;
+      if (mDist <= 1) mScaled = mDist * 0.4;
+      else if (mDist <= 2) mScaled = 0.4 + (mDist-1)*0.35;
+      else mScaled = Math.min(1, 0.75 + (mDist-2)*0.25);
+
+      // Ensemble
+      const w = {z:0.35, iqr:0.15, co:0.12, city:0.08, sudden:0.12, burst:0.08, m:0.10};
+      let combined = Math.min(1, zScaled*w.z + iqrScaled*w.iqr + coScaled*w.co + cityScaled*w.city + suddenScaled*w.sudden + burstScaled*w.burst + mScaled*w.m);
+
+      // increase combined by expiry and CAS and combo and precursor flags
+      if(expFlag) combined = Math.min(1, combined + expFlag*0.5); // expired heavy bump
+      if(!casOk) combined = Math.min(1, combined + 0.1); // small bump for invalid CAS
+      if(comboDetected) combined = Math.min(1, combined + 0.35);
+      if(isPrecursor) combined = 1.0; // force full severity for precursors
+
+      // decide final
+      const triggered = [];
+      if(zFlag) triggered.push('zscore');
+      if(iqrFlag) triggered.push('iqr');
+      if(coFlag) triggered.push('company_bias');
+      if(cityFlag) triggered.push('city_bias');
+      if(suddenFlag) triggered.push('sudden_change');
+      if(burstFlag) triggered.push('burst');
+      if(mDist > 2) triggered.push('multivariate');
+      if(expFlag) triggered.push('expired_or_near_expiry');
+      if(!casOk) triggered.push('cas_format');
+      if(comboDetected) triggered.push('suspicious_combo');
+      if(isPrecursor) triggered.push('critical_precursor');
+
+      const reasons = [];
+      if(isPrecursor) reasons.push("🚨 Critical precursor chemical (" + r.name + ")");
+      if(expFlag) reasons.push("⚠ Expiry: " + expStatus);
+      if(!casOk) reasons.push("");
+      if(zAbs > conf.zThr*1.5) reasons.push(`Quantity extremely different (z=${zAbs.toFixed(2)})`);
+      else if(zAbs > conf.zThr) reasons.push(`Quantity significantly different (z=${zAbs.toFixed(2)})`);
+      if(iqrFlag) reasons.push(`Outside IQR (${conf.iqrMul}×IQR)`);
+      if(coFlag) reasons.push("Company-specific deviation");
+      if(cityFlag) reasons.push("City-specific deviation");
+      if(suddenFlag) reasons.push(`Sudden change vs recent median (${(suddenRatio*100).toFixed(0)}%)`);
+      if(burstFlag) reasons.push(`Burst of records from same company (${sameWindowCount} in 1h)`);
+      if(comboDetected) reasons.push("Suspicious chemical combination detected in recent records");
+      if(mDist > 1.5) reasons.push(`Multivariate profile unusual (dist=${mDist.toFixed(2)})`);
+
+      // final is anomaly if combined >= combThr OR critical
+      let isAnom = combined >= conf.combThr || isPrecursor || expFlag;
+      let severity = "Normal";
+      let statusClass = "normal";
+      if(isPrecursor){ severity = "CRITICAL"; statusClass = "critical"; }
+      else if(combined >= 0.85) { severity = "High"; statusClass = "flagged"; }
+      else if(combined >= conf.combThr) { severity = "Medium"; statusClass = "flagged"; }
+
+      return {
+        idx, batchId: r.batchId || ('B-'+(101+idx)),
+        name: r.name, formula: r.formula, cas: r.cas,
+        quantity: r.quantity, company: r.company, city: r.city,
+        expiry: r._exp? r._exp.toISOString().split('T')[0] : 'N/A',
+        detector: {zAbs, zScaled, iqrFlag, coScaled, cityScaled, suddenRatio, suddenFlag, sameWindowCount, burstFlag, mDist},
+        combined, isAnom, severity, statusClass, triggered, reasons
+      };
+    });
+
+    return results;
+  }
+
+  // render table
+  function render(results){
+    const tbody = $('tableBody');
+    if(!results.length){
+      tbody.innerHTML = '<tr><td colspan="10" class="small">No records</td></tr>';
+      return;
+    }
+    tbody.innerHTML = '';
+    const total = results.length;
+    const anomalies = results.filter(r=>r.isAnom).length;
+    $('totalBatches').textContent = total;
+    $('anomalyCount').textContent = anomalies;
+    $('normalCount').textContent = (total-anomalies);
+    $('anomalyRate').textContent = ((anomalies/Math.max(1,total))*100).toFixed(1) + '%';
+
+    results.forEach(r=>{
+      const tr = document.createElement('tr');
+      if(r.isAnom) tr.className = 'anomaly-row';
+      const reasons = r.reasons && r.reasons.length ? r.reasons.slice(0,4).join('; ') : r.reasons.join('; ');
+      const score = (r.combined*100).toFixed(0) + '%';
+      const formulaAndCas = (r.formula || '-') + (r.cas ? (' / ' + r.cas) : '');
+      tr.innerHTML = `
+        <td>${r.batchId}</td>
+        <td>${r.name}</td>
+        <td>${formulaAndCas}</td>
+        <td>${r.quantity}</td>
+        <td>${r.company}</td>
+        <td>${r.city}</td>
+        <td>${r.expiry || 'N/A'}</td>
+        <td><div class="pill">${score}</div><div class="small muted">z=${r.detector.zAbs? r.detector.zAbs.toFixed(2):'-'} m=${r.detector.mDist? r.detector.mDist.toFixed(2):'-'}</div></td>
+        <td><span class="status ${r.statusClass}">${r.severity}</span></td>
+        <td class="reason-cell">${r.reasons.length ? r.reasons.join('\n') : 'Within normal range'}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  // main loader (fetch API)
+  let timer = null;
+  async function loadAndRun(){
+    try {
+      const res = await fetch(DATA_API, {cache: "no-store"});
+      // API contract: should return JSON object with {.success, .data} or raw array
+      let j = await res.json();
+      let arr = [];
+      if(Array.isArray(j)) arr = j;
+      else if(j && Array.isArray(j.data)) arr = j.data;
+      else if(j && j.success && j.data) arr = j.data;
+      else {
+        console.error("Unexpected API shape", j);
+        $('tableBody').innerHTML = '<tr><td colspan="10" class="small">API returned unexpected shape. Expected array or {data: [...]}</td></tr>';
+        return;
+      }
+
+      if(!arr.length){
+        $('tableBody').innerHTML = '<tr><td colspan="10" class="small">No records returned from API</td></tr>';
+        return;
+      }
+
+      const rows = prepare(arr);
+      rows.sort((a,b)=> (a._ts? a._ts.getTime():0) - (b._ts? b._ts.getTime():0));
+      const results = analyzeRows(rows);
+      render(results);
+    } catch (err){
+      console.error(err);
+      $('tableBody').innerHTML = '<tr><td colspan="10" class="small">Error fetching data. Make sure server runs and CORS allows requests.</td></tr>';
+    }
+  }
+
+  function restartInterval(){
+    if(timer) clearInterval(timer);
+    const ms = cfg().interval;
+    timer = setInterval(loadAndRun, ms);
+  }
+
+  // initial run
+  loadAndRun();
+  restartInterval();
+
+  ['cfg_z','cfg_iqr_mul','cfg_roll_n','cfg_sudden','cfg_comb','cfg_interval'].forEach(id=>{
+    $(id).addEventListener('change', ()=>{
+      loadAndRun();
+      restartInterval();
+    });
+  });
+  </script>
+</body>
+</html>

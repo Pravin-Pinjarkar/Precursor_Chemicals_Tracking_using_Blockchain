@@ -1,0 +1,183 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f7f9fc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  background: url('lion.png');
+  background-size: cover; 
+}
+
+.help-container {
+  max-width: 900px;
+  width: 100%;
+  text-align: center;
+}
+
+.user_re {
+  color: rgb(33, 15, 171) !important;
+}
+
+
+.help-heading {
+  display: inline-block;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #2c3e50;
+  background: linear-gradient(90deg, #4facfe, #00f2fe);
+  padding: 10px 25px;
+  border-radius: 12px;
+  margin-top: 30px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  margin-bottom: 20px;
+}
+
+.faq-card {
+  background: #fff;
+  padding: 25px 20px;
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  text-align: left;
+}
+
+.faq-card h2 {
+  font-size: 1.6rem;
+  color: #1a237e;
+  margin-bottom: 18px;
+}
+
+.faq-item {
+  background: #f9f9f9;
+  border-radius: 10px;
+  padding: 12px 15px;
+  margin-bottom: 14px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.faq-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+}
+
+.faq-item h3 {
+  margin: 0 0 6px;
+  font-size: 1.1rem;
+  color: #0d47a1;
+}
+
+.faq-item p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+
+
+.extra-section {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, #4facfe, #00f2fe, #38ef7d, #fbbf24);
+  background-size: 400% 400%;
+  animation: gradientFlow 8s ease infinite;
+  color: #fff;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+}
+
+.extra-section h3 {
+  color: #ffffff;
+  margin-bottom: 12px;
+  font-size: 1.3rem;
+  font-weight: bold;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+
+.extra-section ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.extra-section ul li a:hover {
+  color: #ffe082; /* soft golden hover */
+}
+
+/* Animate background gradient */
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+
+.contact {
+  margin: 20px auto;
+  text-align: center;
+  max-width: 350px;
+}
+
+.contact button {
+  width: 100%;
+  background: #1e40af;      /* navy blue */
+  border: none;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.white-text {
+  color: white;
+}
+
+.yellow-text {
+  color: #facc15;   /* yellow */
+}
+
+.contact button:hover {
+  background: #15317e;
+}
+
+
+.extra-section ul {
+  list-style: none; /* remove default bullets */
+  padding: 0;
+  margin: 0;
+}
+
+.extra-section ul li {
+  position: relative;
+  padding-left: 25px; /* space for star */
+  margin-bottom: 10px;
+}
+
+.extra-section ul li::before {
+  content: "⭐"; /* star instead of dot */
+  position: absolute;
+  left: 320px;
+  top: 0;
+  font-size: 1.1rem;
+  color: #fbbf24; /* golden star */
+  animation: shine 1.5s infinite alternate;
+}
+
+/* Shining animation */
+@keyframes shine {
+  from {
+    transform: scale(1);
+    color: #fbbf24;
+    text-shadow: 0 0 2px #fcd34d, 0 0 4px #facc15;
+  }
+  to {
+    transform: scale(1.2);
+    color: #fcd34d;
+    text-shadow: 0 0 6px #fde047, 0 0 12px #facc15;
+  }
+}
