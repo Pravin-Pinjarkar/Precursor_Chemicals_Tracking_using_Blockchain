@@ -12,7 +12,7 @@ The goal is to prevent illegal diversion, misuse, and manipulation of sensitive 
 - Blockchain-based immutable transaction records
 - End-to-end supply chain traceability
 - Secure batch creation and tracking
-- Role-based access (Manufacturer, Distributor, Laboratory, Regulator)
+- Role-based access (Manufacturer, Distributor, Lab Assistant)
 - Anomaly detection for suspicious activities
 - Tamper-proof history of chemical movement
 
@@ -29,9 +29,9 @@ The goal is to prevent illegal diversion, misuse, and manipulation of sensitive 
 ---
 
 ## My Project Roles
-- Chemical Industry Owner
-- Distributor
-- Lab Assistant
+- Chemical Industry Owner - (Manufacturer)
+- Distributor- (Supply Chain Partner)
+- Lab Assistant- (Verification & Analysis role)
 
 
 ---
